@@ -105,13 +105,13 @@ def set_config_env():
 
     os.environ['KTCAPI'] = my_apikey
     os.environ['KTCSEC'] = my_secretkey
-    print('[ktcloud] After the command is executed, the KEY VALUE will be volatilized.')
-    print('[ktcloud] So use the EXPORT(SET) CMD like in the following example.')
-    print('-----------------------------------------------------------------------------------------------------------------')
-    print('[ktcloud] #>export KTCAPI=yourkey   (linux cmd. use set in windows)')
-    print('[ktcloud] #>export KTCSEC=yourkey   (linux cmd. use set in windows)')
-    print('-----------------------------------------------------------------------------------------------------------------')
-
+    # print('[ktcloud] After the command is executed, the KEY VALUE will be volatilized.')
+    # print('[ktcloud] So use the EXPORT(SET) CMD like in the following example.')
+    # print('-----------------------------------------------------------------------------------------------------------------')
+    # print('[ktcloud] #>export KTCAPI=yourkey   (linux cmd. use set in windows)')
+    # print('[ktcloud] #>export KTCSEC=yourkey   (linux cmd. use set in windows)')
+    # print('-----------------------------------------------------------------------------------------------------------------')
+    #
 
 def read_config_env():
     return os.environ['KTCAPI'], os.environ['KTCSEC']

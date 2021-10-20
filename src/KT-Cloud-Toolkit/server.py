@@ -17,7 +17,7 @@ import base64
 import common as c
 
 
-def deployVirtualMachine(data, **kargs):
+def deployVirtualMachine(zone, serviceofferingid, templateid, name, **kargs):
     """ Create a new VirtualMachine(VM) 
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
@@ -34,11 +34,11 @@ def deployVirtualMachine(data, **kargs):
     kargs['command'] = 'deployVirtualMachine'
     kargs['response'] = 'json'
     kargs['apikey'] = my_apikey
-    ZoneName = data['zone']
+    ZoneName = zone
     kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
-    kargs['serviceofferingid'] = data['serviceofferingid']
-    kargs['templateid'] = data['templateid']
-    kargs['name'] = 'bb'
+    kargs['serviceofferingid'] = serviceofferingid
+    kargs['templateid'] = templateid
+    kargs['name'] = name
 
     M2Bool = c.IsM2(ZoneName)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
@@ -414,17 +414,22 @@ def createPortForwardingRule(**kargs):
     * Examples : print(server.createPortForwardingRule(zone='KR-M', ipaddressid='3a304bed-d7c0-4836-a31f-c4e10d2ab0be', privateport='5555', protocol='tcp', publicport='5555', vmid='47d2ea4c-d434-418b-a854-c99054abeff7'))
     """    
     my_apikey, my_secretkey = c.read_config()
+    #
+    # kargs['zoneid'] = c.getzoneidbyhname(zone)
+    # M2Bool = c.IsM2(zone)
+    # baseurl = c.geturl(ctype='server', m2=M2Bool)
+    # kargs['virtualmachineid'] = vmid
+    # kargs['ipaddressid'] = publicIp
+    # kargs['privateport'] = privatePort
+    # kargs['protocol'] = protocol
+    # kargs['publicport'] = publicPort
+    #
+    # kargs['command'] = 'createPortForwardingRule'
+    # kargs['response'] = 'json'
+    # kargs['apikey'] = my_apikey
+    #
+    # return c.makerequest(kargs, baseurl, my_secretkey)
 
-    if not 'zone' in kargs:
-        return c.printZoneHelp()
-    if not 'ipaddressid' in kargs:
-        return '[ktcloud] Missing required argument \"ipaddressid\" (public IP id)'
-    if not 'privateport' in kargs:
-        return '[ktcloud] Missing required argument \"privateport\"'
-    if not 'protocol' in kargs:
-        return '[ktcloud] Missing required argument \"protocol\" (TCP or UDP)'
-    if not 'publicport' in kargs:
-        return '[ktcloud] Missing required argument \"publicport\"'
     kargs['zoneid'] = c.getzoneidbyhname(kargs['zone'])
     M2Bool = c.IsM2(kargs['zone'])
     del kargs['zone']
@@ -968,7 +973,7 @@ def listVirtualMachineForCharge(**kargs):
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def listPublicIpAddresses(**kargs):
+def listPublicIpAddresses(zone, **kargs):
     """ List of Public IP Address
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
@@ -976,11 +981,8 @@ def listPublicIpAddresses(**kargs):
     """    
     my_apikey, my_secretkey = c.read_config()
 
-    if not 'zone' in kargs:
-        return c.printZoneHelp()
-    kargs['zoneid'] = c.getzoneidbyhname(kargs['zone'])
-    M2Bool = c.IsM2(kargs['zone'])
-    del kargs['zone']
+    kargs['zoneid'] = c.getzoneidbyhname(zone)
+    M2Bool = c.IsM2(zone)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
 
     kargs['command'] = 'listPublicIpAddresses'
