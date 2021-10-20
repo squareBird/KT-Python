@@ -4,4 +4,6 @@ myZones = myServer.zoneList()
 
 # print(myZones)
 
-myServer.createVM()
+# myServer.createVM()
+# myServer.stopVM()
+myServer.deleteVM()

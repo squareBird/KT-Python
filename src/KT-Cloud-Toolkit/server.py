@@ -38,7 +38,7 @@ def deployVirtualMachine(data, **kargs):
     kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
     kargs['serviceofferingid'] = data['serviceofferingid']
     kargs['templateid'] = data['templateid']
-    kargs['name'] = 'test12345'
+    kargs['name'] = 'bb'
 
     M2Bool = c.IsM2(ZoneName)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
@@ -63,7 +63,7 @@ def deployVirtualMachine(data, **kargs):
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def destroyVirtualMachine(**kargs):
+def destroyVirtualMachine(zone, vmid, **kargs):
     """ Destroy your VirtualMachine(VM) 
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
@@ -72,12 +72,8 @@ def destroyVirtualMachine(**kargs):
     """    
     my_apikey, my_secretkey = c.read_config()
 
-    if not 'zone' in kargs:
-        return c.printZoneHelp()
-    ZoneName = kargs['zone']
-    del kargs['zone']
-    kargs['id'] = kargs['vmid']
-    del kargs['vmid']
+    ZoneName = zone
+    kargs['id'] = vmid
     kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
     M2Bool = c.IsM2(ZoneName)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
@@ -115,7 +111,7 @@ def startVirtualMachine(**kargs):
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def stopVirtualMachine(**kargs):
+def stopVirtualMachine(zone, vmid, **kargs):
     """ Stop your VirtualMachine(VM) 
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
@@ -124,14 +120,8 @@ def stopVirtualMachine(**kargs):
     """    
     my_apikey, my_secretkey = c.read_config()
 
-    if not 'zone' in kargs:
-        return c.printZoneHelp()
-    if not 'vmid' in kargs:
-        return '[ktcloud] Missing required argument \"vmid\"'
-    ZoneName = kargs['zone']
-    del kargs['zone']
-    kargs['id'] = kargs['vmid']
-    del kargs['vmid']
+    ZoneName = zone
+    kargs['id'] = vmid
     kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
     M2Bool = c.IsM2(ZoneName)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
@@ -911,7 +901,7 @@ def listAvailableProductTypes(**kargs):
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def listVirtualMachines(**kargs):
+def listVirtualMachines(zone, **kargs):
     """ List VirtualMachines
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
@@ -919,11 +909,11 @@ def listVirtualMachines(**kargs):
     """    
     my_apikey, my_secretkey = c.read_config()
 
-    if not 'zone' in kargs:
-        return c.printZoneHelp()
-    kargs['zoneid'] = c.getzoneidbyhname(kargs['zone'])
-    M2Bool = c.IsM2(kargs['zone'])
-    del kargs['zone']
+    # if not 'zone' in kargs:
+    #     return c.printZoneHelp()
+    kargs['zoneid'] = c.getzoneidbyhname(zone)
+    M2Bool = c.IsM2(zone)
+    # del kargs['zone']
     baseurl = c.geturl(ctype='server', m2=M2Bool)
 
     kargs['command'] = 'listVirtualMachines'
