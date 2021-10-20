@@ -17,15 +17,15 @@ import base64
 import common as c
 
 
-def deployVirtualMachine(zone, serviceofferingid, templateid, name, **kargs):
-    """ Create a new VirtualMachine(VM) 
+def deployVirtualMachine(**kargs):
+    """ Create a new VirtualMachine(VM)
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
         - serviceofferingid(String, Required): Spec ID of VM. See Ref(below link).
         - templateid(String, Required): OS ID. See Ref(below link).
         - diskofferingid(String, Required): Additional Volume ID of Your VM. See Ref(below link).
             ** Choose above 3 option or this productcode option.
-        - productcode(String, Required) : producttype_OStype_VMSpec code. 
+        - productcode(String, Required) : producttype_OStype_VMSpec code.
     * Examples : print(server.deployVirtualMachine(zone='KR-M', serviceofferingid='f86f09f6-9acf-4b30-936c-cfb409a89e68', diskofferingid='87c0a6f6-c684-4fbe-a393-d8412bcf788d'))
     * Ref :  https://cloud.kt.com/portal/openapi-guide/computing_enterprise-Server-server_api_make
     """
@@ -34,12 +34,16 @@ def deployVirtualMachine(zone, serviceofferingid, templateid, name, **kargs):
     kargs['command'] = 'deployVirtualMachine'
     kargs['response'] = 'json'
     kargs['apikey'] = my_apikey
-    ZoneName = zone
-    kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
-    kargs['serviceofferingid'] = serviceofferingid
-    kargs['templateid'] = templateid
-    kargs['name'] = name
 
+    if not 'zone' in kargs:
+        return 'Missing required argument \"zone\" \n \
+  - KR-CA : KOREA-Central A Zone \n \
+  - KR-CB : KOREA-Central B Zone \n \
+  - KR-M  : KOREA M Zone  \n \
+  - KR-M2 : KOREA M2 Zone '
+    ZoneName = kargs['zone']
+    del kargs['zone']
+    kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
     M2Bool = c.IsM2(ZoneName)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
 
@@ -57,23 +61,26 @@ def deployVirtualMachine(zone, serviceofferingid, templateid, name, **kargs):
             return '[ktcloud] Missing required argument \"serviceofferingid\"'
         if not 'templateid' in kargs:
             return '[ktcloud] Missing required argument \"templateid\"'
-        # if not 'diskofferingid' in kargs:
-        #     return '[ktcloud] Missing required argument "diskofferingid"'
-
+    #         if not 'diskofferingid' in kargs:
+    #             return '[ktcloud] Missing required argument "diskofferingid"'
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def destroyVirtualMachine(zone, vmid, **kargs):
-    """ Destroy your VirtualMachine(VM) 
+def destroyVirtualMachine(**kargs):
+    """ Destroy your VirtualMachine(VM)
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
-        - vmid(String, Required): VM id to destory. 
+        - vmid(String, Required): VM id to destory.
     * Examples : print(server.destroyVirtualMachine (zone='KR-M', id='2a40283f-148d-4144-a6ce-e042fad08109'))
-    """    
+    """
     my_apikey, my_secretkey = c.read_config()
 
-    ZoneName = zone
-    kargs['id'] = vmid
+    if not 'zone' in kargs:
+        return c.printZoneHelp()
+    ZoneName = kargs['zone']
+    del kargs['zone']
+    kargs['id'] = kargs['vmid']
+    del kargs['vmid']
     kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
     M2Bool = c.IsM2(ZoneName)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
@@ -111,17 +118,23 @@ def startVirtualMachine(**kargs):
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def stopVirtualMachine(zone, vmid, **kargs):
-    """ Stop your VirtualMachine(VM) 
+def stopVirtualMachine(**kargs):
+    """ Stop your VirtualMachine(VM)
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
-        - vmid(String, Required): VM id to stop. 
+        - vmid(String, Required): VM id to stop.
     * Examples : print(server.stopVirtualMachine(zone='KR-M', vmid='47d2ea4c-d434-418b-a854-c99054abeff7'))
-    """    
+    """
     my_apikey, my_secretkey = c.read_config()
 
-    ZoneName = zone
-    kargs['id'] = vmid
+    if not 'zone' in kargs:
+        return c.printZoneHelp()
+    if not 'vmid' in kargs:
+        return '[ktcloud] Missing required argument \"vmid\"'
+    ZoneName = kargs['zone']
+    del kargs['zone']
+    kargs['id'] = kargs['vmid']
+    del kargs['vmid']
     kargs['zoneid'] = c.getzoneidbyhname(ZoneName)
     M2Bool = c.IsM2(ZoneName)
     baseurl = c.geturl(ctype='server', m2=M2Bool)
@@ -906,19 +919,19 @@ def listAvailableProductTypes(**kargs):
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def listVirtualMachines(zone, **kargs):
+def listVirtualMachines(**kargs):
     """ List VirtualMachines
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
     * Examples : print(server.listVirtualMachines(zone='KR-M'))
-    """    
+    """
     my_apikey, my_secretkey = c.read_config()
 
-    # if not 'zone' in kargs:
-    #     return c.printZoneHelp()
-    kargs['zoneid'] = c.getzoneidbyhname(zone)
-    M2Bool = c.IsM2(zone)
-    # del kargs['zone']
+    if not 'zone' in kargs:
+        return c.printZoneHelp()
+    kargs['zoneid'] = c.getzoneidbyhname(kargs['zone'])
+    M2Bool = c.IsM2(kargs['zone'])
+    del kargs['zone']
     baseurl = c.geturl(ctype='server', m2=M2Bool)
 
     kargs['command'] = 'listVirtualMachines'
@@ -973,16 +986,19 @@ def listVirtualMachineForCharge(**kargs):
     return c.makerequest(kargs, baseurl, my_secretkey)
 
 
-def listPublicIpAddresses(zone, **kargs):
+def listPublicIpAddresses(**kargs):
     """ List of Public IP Address
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
     * Examples : print(server.listPublicIpAddresses(zone='KR-M'))
-    """    
+    """
     my_apikey, my_secretkey = c.read_config()
 
-    kargs['zoneid'] = c.getzoneidbyhname(zone)
-    M2Bool = c.IsM2(zone)
+    if not 'zone' in kargs:
+        return c.printZoneHelp()
+    kargs['zoneid'] = c.getzoneidbyhname(kargs['zone'])
+    M2Bool = c.IsM2(kargs['zone'])
+    del kargs['zone']
     baseurl = c.geturl(ctype='server', m2=M2Bool)
 
     kargs['command'] = 'listPublicIpAddresses'
