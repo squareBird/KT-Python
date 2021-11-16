@@ -419,8 +419,8 @@ def createPortForwardingRule(**kargs):
     """ Create PortForwarding Rule in your Selected VM & IP
     * Args:
         - zone(String, Required) : [KR-CA, KR-CB, KR-M, KR-M2]
-        - ipaddressid(String, Required) : public IP ID
-        - privateport(String, Required) : private port
+        - ipaddressid(String, Required) : 공인 IP
+        - privateport(String, Required) : 포트포워딩 대상 VM 포트
         - protocol(String, Required) : TCP or UDP
         - publicport(String, Required) : public port
         - vmid(String, Required): VM id to update. 
@@ -491,14 +491,14 @@ def createFirewallRule(**kargs):
     """    
     my_apikey, my_secretkey = c.read_config()
 
-    if not 'zone' in kargs:
-        return c.printZoneHelp()
-    if not 'ipaddressid' in kargs:
-        return '[ktcloud] Missing required argument \"ipaddressid\" '
-    if not 'protocol' in kargs:
-        return '[ktcloud] Missing required argument \"protocol\" '
-    if not 'startport' in kargs:
-        return '[ktcloud] Missing required argument \"startport\" '
+    # if not 'zone' in kargs:
+    #     return c.printZoneHelp()
+    # if not 'ipaddressid' in kargs:
+    #     return '[ktcloud] Missing required argument \"ipaddressid\" '
+    # if not 'protocol' in kargs:
+    #     return '[ktcloud] Missing required argument \"protocol\" '
+    # if not 'startport' in kargs:
+    #     return '[ktcloud] Missing required argument \"startport\" '
     kargs['zoneid'] = c.getzoneidbyhname(kargs['zone'])
     M2Bool = c.IsM2(kargs['zone'])
     del kargs['zone']

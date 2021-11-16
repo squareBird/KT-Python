@@ -100,8 +100,8 @@ def set_config_env():
     # my_apikey = input('[ktcloud] api_key : ')
     # my_secretkey = input('[ktcloud] secret key : ')
 
-    my_apikey = "nuhFOBeBS0JteIghk95rv93jyVKIwIusLLjdBAlqydOlfp_uk7tFnD27dTBGvf1XKhtQncdfXCeYjuNSXBJnHA"
-    my_secretkey = "OMVSuPmHDMlgEmjGSjru800303gVowTWA69tup93aFnv8vSWfSrC22EZo7YN-_ojJ8UFgP29cWZwzEiaOsqLUQ"
+    my_apikey = "ZcJ9_YkI1SN_amSBVrCxIUfWz0vVWxxO01HNmyjUdvimHK9IyBiq-LHp2eZ2V1z8gNTcILyVxkix68ZwckmbCg"
+    my_secretkey = "nuNn92SJGu085g_bawaG6L0rRM2ixktQ_hQ55So8PcCeRaPwRfmuMGiz-Lg_Azh4QPxVDG0ibaq00SYe_OkPag"
 
     os.environ['KTCAPI'] = my_apikey
     os.environ['KTCSEC'] = my_secretkey
@@ -131,6 +131,7 @@ def makerequest(request, baseurl, my_secretkey):
     make_request = bytes(sig_str, 'UTF-8')
     sig = urllib.parse.quote_plus(base64.b64encode(hmac.new(secret_key, make_request.lower(), digestmod=hashlib.sha1).digest()))
     req=baseurl+sig_str+'&signature='+sig
+    # print(req)
     response = requests.get(req)
     res = response.json()
     return res
@@ -142,7 +143,6 @@ def makerequest_debug(request, baseurl, my_secretkey):
     make_request = bytes(sig_str, 'UTF-8')
     sig = urllib.parse.quote_plus(base64.b64encode(hmac.new(secret_key, make_request.lower(), digestmod=hashlib.sha1).digest()))
     req=baseurl+sig_str+'&signature='+sig
-    print(req)
     response = requests.get(req)
     res = response.json()
     return res
