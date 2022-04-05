@@ -100,8 +100,8 @@ def set_config_env():
     # my_apikey = input('[ktcloud] api_key : ')
     # my_secretkey = input('[ktcloud] secret key : ')
 
-    my_apikey = "ZcJ9_YkI1SN_amSBVrCxIUfWz0vVWxxO01HNmyjUdvimHK9IyBiq-LHp2eZ2V1z8gNTcILyVxkix68ZwckmbCg"
-    my_secretkey = "nuNn92SJGu085g_bawaG6L0rRM2ixktQ_hQ55So8PcCeRaPwRfmuMGiz-Lg_Azh4QPxVDG0ibaq00SYe_OkPag"
+    my_apikey = ""
+    my_secretkey = ""
 
     os.environ['KTCAPI'] = my_apikey
     os.environ['KTCSEC'] = my_secretkey
